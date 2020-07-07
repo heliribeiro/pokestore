@@ -14,8 +14,8 @@ function App() {
   const [namePreco, setNamePreco] = useState([])
   const [loadingPage, setLoadingPage] = useState(false)
   const [paginaAtual, setPaginaAtual] = useState(1)
-  const [cardsPerPage,setCardsPerPage] = useState(9)
-  const [totalCards] = useState(81)
+  const [cardsPerPage] = useState(9)
+  const [totalCards] = useState(243)
 
 
   // let arrayPokemons = props.pokemonAtributos.reduce((total,current,index)=>{
@@ -62,7 +62,7 @@ function App() {
 
 
 
-  }, [])
+  }, [totalCards])
  
 
   function handleClickCard(name, preco) {
