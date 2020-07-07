@@ -15,7 +15,7 @@ function App() {
   const [loadingPage, setLoadingPage] = useState(false)
   const [paginaAtual, setPaginaAtual] = useState(1)
   const [cardsPerPage] = useState(9)
-  const [totalCards] = useState(180)
+  const [totalCards] = useState(81)
 
 
   // let arrayPokemons = props.pokemonAtributos.reduce((total,current,index)=>{
@@ -99,6 +99,14 @@ function App() {
     }
   }
 
+  
+  
+ const paginate = number => setPaginaAtual(number)
+
+  const indexOfLastCard = paginaAtual * cardsPerPage
+  const indexOfFirstCard = indexOfLastCard - cardsPerPage
+  const currentCards = pokemonAtributos.slice(indexOfFirstCard,indexOfLastCard)
+
   function handleClickMinus(name, preco) {
     const pokemon = pokemonAtributos.find(pokemon => pokemon.name === name)
     const indice = namePreco.findIndex(item => item.name === name)
@@ -125,13 +133,6 @@ function App() {
     ])
 
   }
-  
- const paginate = number => setPaginaAtual(number)
-
-  const indexOfLastCard = paginaAtual * cardsPerPage
-  const indexOfFirstCard = indexOfLastCard - cardsPerPage
-  const currentCards = pokemonAtributos.slice(indexOfFirstCard,indexOfLastCard)
-
   return (
     <div className="container">
       <div className='row'>
