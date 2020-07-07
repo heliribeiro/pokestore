@@ -15,7 +15,7 @@ function App() {
   const [loadingPage, setLoadingPage] = useState(false)
   const [paginaAtual, setPaginaAtual] = useState(1)
   const [cardsPerPage] = useState(9)
-  const [totalCards] = useState(243)
+  const [totalCards] = useState(180)
 
 
   // let arrayPokemons = props.pokemonAtributos.reduce((total,current,index)=>{
