@@ -13,7 +13,7 @@ export default function (props) {
 
   return (
     <div className=' row col-4 carrinho'>
-      <ul className="list-group col-12">
+      <ul className="list-group col-12 list-group-flush">
         <li className="list-group-item fontCarrinho">Carrinho</li>
         <div className="table-wrapper-scroll-y my-custom-scrollbar">
           <table className="table table-borderless table-hover scrollbar-primary table-sm">

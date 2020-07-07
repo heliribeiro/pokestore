@@ -5,43 +5,65 @@ import Cards from './Cards';
 import Cabecalho from './Cabecalho'
 import Carrinho from './Carrinho'
 import axios from 'axios';
+import Pagination from './Pagination'
 
 function App() {
 
 
   const [pokemonAtributos, setPokemonAtributos] = useState([])
   const [namePreco, setNamePreco] = useState([])
+  const [loadingPage, setLoadingPage] = useState(false)
+  const [paginaAtual, setPaginaAtual] = useState(1)
+  const [cardsPerPage,setCardsPerPage] = useState(9)
+  const [totalCards] = useState(81)
 
-  const numeroCards = 9
 
+  // let arrayPokemons = props.pokemonAtributos.reduce((total,current,index)=>{
+  //   const belongArrayIndex = Math.ceil((index+1)/ ITEMS_PAGINA) -1
+  //   total[belongArrayIndex] ? total[belongArrayIndex].push(current): total.push([current])
+  //   return total
+  // },[])
+  
   useEffect(() => {
-    const urlBase = `https://pokeapi.co/api/v2/pokemon?&limit=${numeroCards}`
     const fetchPokemon = async () => {
-      let response = await axios.get(urlBase)
+     setLoadingPage(true)
 
-      let pokemon = response.data.results
+      let pokemonArray = []
+      let result
+      for (let i = 1; i<= totalCards; i++){
+        result =  await axios.get(`https://pokeapi.co/api/v2/pokemon/${i}`)
+        pokemonArray.push(result.data)
+        
+      }
+
       let nImage = 0;
-      let pokemonFinal = pokemon.map(element => {
+      let pokemonFinal = pokemonArray.map(element => {
 
         const pokemonComPreco = {
           name: element.name,
-          url: element.url,
-          preco: (Math.random() * 1000).toFixed(2),
-          nImage: ++nImage
+          preco: element.base_experience * element.height,
+          nImage: ++nImage,
         }
 
         return (
           pokemonComPreco
         )
 
-      });
-
+      })
+  
+     
       setPokemonAtributos(pokemonFinal)
 
+      setLoadingPage(false)
     }
-    fetchPokemon()
-  }, [])
 
+    fetchPokemon()
+
+
+
+
+  }, [])
+ 
 
   function handleClickCard(name, preco) {
 
@@ -103,17 +125,26 @@ function App() {
     ])
 
   }
+  
+ const paginate = number => setPaginaAtual(number)
 
-  console.log(namePreco)
+  const indexOfLastCard = paginaAtual * cardsPerPage
+  const indexOfFirstCard = indexOfLastCard - cardsPerPage
+  const currentCards = pokemonAtributos.slice(indexOfFirstCard,indexOfLastCard)
 
   return (
     <div className="container">
       <div className='row'>
 
         <Cabecalho />
-        <Cards callbackParent={(name, preco) => handleClickCard(name, preco)} pokemonAtributos={pokemonAtributos} />
-        <Carrinho callbackParent={(name, preco) => handleClickMinus(name, preco)} namePreco={namePreco} pokemonAtributos={pokemonAtributos} />
-       
+        <Cards 
+        callbackParent={(name, preco) => handleClickCard(name, preco)}
+        pokemonAtributos={currentCards}
+        loadingPage={loadingPage}
+        />
+        <Carrinho callbackParent={(name, preco) => handleClickMinus(name, preco)} namePreco={namePreco} />
+        <Pagination totalCards={totalCards} cardsPerPage={cardsPerPage} paginate={paginate}/>
+  
       </div>
     
     </div>
